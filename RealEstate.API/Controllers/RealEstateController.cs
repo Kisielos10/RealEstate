@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RealEstate.API.DTO;
+using RealEstate.API.Repositiories;
 
 namespace RealEstate.API.Controllers
 {
@@ -12,17 +13,31 @@ namespace RealEstate.API.Controllers
     [ApiController]
     public class RealEstateController : ControllerBase
     {
+        private readonly IRealEstateRepository _realEstateRepository;
+
+        public RealEstateController( IRealEstateRepository realEstateRepository)
+        {
+            _realEstateRepository = realEstateRepository;
+        }
+
         [HttpGet]
         public IEnumerable<RealEstateDto> Get()
         {
-            List<RealEstateDto> realEstateDtos = new List<RealEstateDto>
+            var realEstate = _realEstateRepository.Get();
+            return realEstate;
+        }
+
+        [HttpGet("{id}")]
+        public RealEstateDto GetById(int id)
+        {
+            var realEstate = _realEstateRepository.GetById(id);
+
+            if (realEstate == null)
             {
-                new RealEstateDto()
-                {
-                    Area = 200.2m
-                }
-            };
-            return realEstateDtos;
+                return null;
+            }
+
+            return realEstate;
         }
     }
 }
