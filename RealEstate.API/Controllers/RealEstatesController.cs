@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using NSwag.Annotations;
 using RealEstate.API.DTO;
 using RealEstate.API.Repositiories;
 
@@ -11,11 +13,11 @@ namespace RealEstate.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RealEstateController : ControllerBase
+    public class RealEstatesController : ControllerBase
     {
         private readonly IRealEstateRepository _realEstateRepository;
 
-        public RealEstateController( IRealEstateRepository realEstateRepository)
+        public RealEstatesController( IRealEstateRepository realEstateRepository)
         {
             _realEstateRepository = realEstateRepository;
         }
@@ -27,17 +29,19 @@ namespace RealEstate.API.Controllers
             return realEstate;
         }
 
+        [SwaggerResponse(HttpStatusCode.NotFound,typeof(string))]
+        [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
         [HttpGet("{id}")]
-        public RealEstateDto GetById(int id)
+        public ActionResult<RealEstateDto> GetById(int id)
         {
             var realEstate = _realEstateRepository.GetById(id);
 
             if (realEstate == null)
             {
-                return null;
+                return NotFound();
             }
 
-            return realEstate;
+            return Ok(realEstate);
         }
     }
 }

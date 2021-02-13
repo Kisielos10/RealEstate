@@ -27,18 +27,22 @@ namespace RealEstate.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IRealEstateRepository,RealEstateRepository>();
-            services.AddSingleton<IRealEstateNotes,RealEstateNotes>();
+            services.AddSingleton<IRealEstateNoteRepository,RealEstateNoteRepository>();
+
             services.AddControllers();
             services.AddSwaggerDocument();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger logger)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.ConfigureExceptionHandler(logger);
 
             app.UseHttpsRedirection();
 
@@ -52,6 +56,8 @@ namespace RealEstate.API
             });
             app.UseOpenApi();
             app.UseSwaggerUi3();
+            //app.UseDeveloperExceptionPage();
+
         }
     }
 }

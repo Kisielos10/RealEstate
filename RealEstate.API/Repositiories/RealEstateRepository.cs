@@ -37,7 +37,7 @@ namespace RealEstate.API.Repositiories
 
         public RealEstateDto GetById(int i)
         {
-            var realEstate = realEstateDtos.Find(x => x.Id == i);
+            var realEstate = realEstateDtos.FirstOrDefault(x => x.Id == i);
 
             return realEstate;
         }

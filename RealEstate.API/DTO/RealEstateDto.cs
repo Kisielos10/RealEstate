@@ -17,23 +17,10 @@ namespace RealEstate.API.DTO
         [Range(0,20000000)]
         public decimal Price { get; set; }
         public decimal Area { get; set; }
-        public AddressDto Address { get; set; }
-        public FactsAndFeatures FactsAndFeatures { get; set; }
-    }
-
-    public class FactsAndFeatures
-    {
-        public enum BuildingType
-        {
-            SingleFamilyHome,
-            MultiFamilyHome,
-            Condominium,
-            Lot
-        }
-
         public BuildingType Type { get; set; }
         public int YearBuilt { get; set; }
         public decimal PricePerMeter { get; set; }
+        public AddressDto Address { get; set; }
 
     }
 
