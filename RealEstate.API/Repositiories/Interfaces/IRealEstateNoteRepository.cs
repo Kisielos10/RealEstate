@@ -11,6 +11,6 @@ namespace RealEstate.API.Repositiories
         RealEstateNoteDto GetById(int i);
         bool Put(RealEstateNoteDto realEstateNoteDto, int id);
         bool Delete(int id);
-        bool Post(RealEstateNoteDto realEstateNoteDto);
+        RealEstateNoteDto Add(CreateRealEstateNoteDto createRealEstateNoteDto);
     }
 }

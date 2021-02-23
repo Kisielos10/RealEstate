@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-//TODO rozwinąć sensowne atrybuty
 namespace RealEstate.API.DTO
 {
     /// <summary>

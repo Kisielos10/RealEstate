@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RealEstate.API.Middleware;
 using RealEstate.API.Repositiories;
 
 namespace RealEstate.API
@@ -34,7 +35,7 @@ namespace RealEstate.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
             if (env.IsDevelopment())
@@ -42,13 +43,11 @@ namespace RealEstate.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.ConfigureExceptionHandler(logger);
-
-            app.UseHttpsRedirection();
+            app.UseMiddleware<HeaderAdditionMiddleware>();
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -56,7 +55,8 @@ namespace RealEstate.API
             });
             app.UseOpenApi();
             app.UseSwaggerUi3();
-            //app.UseDeveloperExceptionPage();
+            
+            app.UseDeveloperExceptionPage();
 
         }
     }

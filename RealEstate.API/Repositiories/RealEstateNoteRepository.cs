@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using RealEstate.API.DTO;
 
@@ -12,21 +14,21 @@ namespace RealEstate.API.Repositiories
         {
             new RealEstateNoteDto()
             {
-                Id = 0,
+                Id = 1,
                 Text = "Beautiful 3 bedroom, 2 bathroom, single story home with mountain views in the community of Victorville! Enjoy an open floor plan with an inviting fireplace and an open kitchen. The kitchen offers white cabinetry, black appliances, and views to the back yard. The primary bedroom features carpet flooring, a walk-in closet, and dual sinks in the primary bathroom. Additional property features include sliding doors to the covered outdoor patio, a 2 car garage, and no HOA. Convenient to area shops, schools, and easy access to major freeways!",
                 CreatedAt = DateTime.Now,
                 RealEstateId = 0
             },
             new RealEstateNoteDto()
             {
-                Id = 1,
+                Id = 2,
                 Text = "Has an additional bedroom at entrance for those young adults that want there privacy, Owner will give credit for carpet and paint, Needs TLC  Enjoy those holidays with the chimney! This wont last! Take Advantage!",
                 CreatedAt = DateTime.Today,
                 RealEstateId = 1
             },
             new RealEstateNoteDto()
             {
-                Id = 2,
+                Id = 3,
                 Text = "There is a large master bedroom upstairs with a large walk in closet.  The master bath also features a Jacuzzi tub.  New carpeting was recently installed and fresh interior paint throughout.",
                 CreatedAt = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture),
                 RealEstateId = 2
@@ -47,26 +49,30 @@ namespace RealEstate.API.Repositiories
             return realEstateNote;
         }
 
-        public bool Post(RealEstateNoteDto realEstateNoteDto)
+        public RealEstateNoteDto Add(CreateRealEstateNoteDto createRealEstateNoteDto)
         {
             int id;
             if (!realEstateNotes.Any())
             {
-                id = 0;
+                id = 1;
             }
             else
             {
                 id = realEstateNotes.Max(x => x.Id) + 1;
             }
 
-            if (realEstateNoteDto.CreatedAt.Year > DateTime.Today.Year || realEstateNoteDto.CreatedAt.Year < 1900)
+            var realEstateNoteDto = new RealEstateNoteDto
             {
-                return false;
-            }
-            realEstateNoteDto.Id = id;
+                //TODO przypomnij o testach na githubie
+                //TODO przypomnij o ErrorDto
+                CreatedAt = createRealEstateNoteDto.CreatedAt ?? DateTime.Now, 
+                Id = id,
+                RealEstateId = createRealEstateNoteDto.RealEstateId, //TODO dodaj walidacje czy istnieje realestate jeżeli nie istnieje to NotFound("RealEstate nie istnieje")
+                Text = createRealEstateNoteDto.Text
+            };
             realEstateNotes.Add(realEstateNoteDto);
 
-            return true;
+            return realEstateNoteDto;
         }
 
         public bool Put(RealEstateNoteDto realEstateNoteDto, int id)

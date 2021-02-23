@@ -12,16 +12,13 @@ using RealEstate.API.Repositiories;
 
 namespace RealEstate.API.Controllers
 {
-    //TODO Dodać DTO z error message kod 500 ?stack trace?
-    //TODO ASP Web Api Middleware
-
     [Route("api/[controller]")]
     [ApiController]
     public class RealEstateNotesController : ControllerBase
     {
         private readonly IRealEstateNoteRepository _realEstateNotes;
 
-        public RealEstateNotesController( IRealEstateNoteRepository realEstateNotes, ILogger logger)
+        public RealEstateNotesController( IRealEstateNoteRepository realEstateNotes)
         {
             _realEstateNotes = realEstateNotes;
         }
@@ -44,12 +41,12 @@ namespace RealEstate.API.Controllers
         }
 
         [SwaggerResponse(HttpStatusCode.NotFound,typeof(string))]
-        [SwaggerResponse(HttpStatusCode.NoContent,typeof(RealEstateNoteDto))]
+        [SwaggerResponse(HttpStatusCode.NoContent,typeof(string))]
         [HttpDelete("{id}")]
         public ActionResult<RealEstateNoteDto> Delete([FromRoute]int id)
         {
             if (!ModelState.IsValid)
-                return BadRequest("Invalid data.");
+                return BadRequest("Upewnij się, że wszystkie wymagane zmienne zostały wprowadzone");
 
             var realEstateNote = _realEstateNotes.Delete(id);
 
@@ -62,20 +59,19 @@ namespace RealEstate.API.Controllers
 
         }
 
+        [SwaggerResponse(HttpStatusCode.Created,typeof(CreateRealEstateNoteDto))]
+        [SwaggerResponse(HttpStatusCode.BadRequest,typeof(string))]
+
         [HttpPost]
-        public ActionResult<RealEstateNoteDto> Post([FromBody] RealEstateNoteDto realEstateNoteDto)
+        public ActionResult<RealEstateNoteDto> Post([FromBody] CreateRealEstateNoteDto createRealEstateNoteDto)
         {
+            //IValidatableObject 
             if (!ModelState.IsValid)
                 return BadRequest("Invalid data.");
 
-            var realEstateNote = _realEstateNotes.Post(realEstateNoteDto);
+            var result = _realEstateNotes.Add(createRealEstateNoteDto);
 
-            if (realEstateNote)
-            {
-                return BadRequest();
-            }
-
-            return NotFound();
+            return Created(new Uri($"{Request.Path}/{result.Id}",UriKind.Relative) ,result);
         }
         
     }

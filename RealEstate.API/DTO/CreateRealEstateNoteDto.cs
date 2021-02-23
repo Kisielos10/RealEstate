@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace RealEstate.API.DTO
 {
-    public class RealEstateNoteDto
+    public class CreateRealEstateNoteDto
     {
-        [Required]
-        public int Id { get; set; }
         [StringLength(500)]
         [Required(ErrorMessage = "The text is required")]
         public string Text { get; set; }
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
         [Required] 
         public int RealEstateId { get; set; }
     }
