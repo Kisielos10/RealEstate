@@ -17,10 +17,12 @@ namespace RealEstate.API.Controllers
     public class RealEstateNotesController : ControllerBase
     {
         private readonly IRealEstateNoteRepository _realEstateNotes;
+        private readonly IRealEstateRepository _realEstateRepository;
 
-        public RealEstateNotesController( IRealEstateNoteRepository realEstateNotes)
+        public RealEstateNotesController( IRealEstateNoteRepository realEstateNotes, IRealEstateRepository realEstateRepository)
         {
             _realEstateNotes = realEstateNotes;
+            _realEstateRepository = realEstateRepository;
         }
         [SwaggerResponse(HttpStatusCode.NotFound,typeof(string))]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateNoteDto))]
@@ -61,13 +63,17 @@ namespace RealEstate.API.Controllers
 
         [SwaggerResponse(HttpStatusCode.Created,typeof(CreateRealEstateNoteDto))]
         [SwaggerResponse(HttpStatusCode.BadRequest,typeof(string))]
-
+        [SwaggerResponse(HttpStatusCode.NotFound,typeof(string))]
         [HttpPost]
-        public ActionResult<RealEstateNoteDto> Post([FromBody] CreateRealEstateNoteDto createRealEstateNoteDto)
+        public ActionResult<RealEstateNoteDto> Post([FromBody] CreateRealEstateNoteDto createRealEstateNoteDto )
         {
             //IValidatableObject 
             if (!ModelState.IsValid)
                 return BadRequest("Invalid data.");
+            if (_realEstateRepository.Get().Any(x => x.Id == createRealEstateNoteDto.RealEstateId))
+            {
+                return NotFound("The note is not connected to any Real Estate");
+            }
 
             var result = _realEstateNotes.Add(createRealEstateNoteDto);
 

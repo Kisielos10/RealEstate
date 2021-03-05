@@ -23,13 +23,16 @@ namespace RealEstate.API.Controllers
         }
 
         [HttpGet]
+        [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
         public IEnumerable<RealEstateDto> Get()
         {
             var realEstate = _realEstateRepository.Get();
             return realEstate;
         }
 
-        [SwaggerResponse(HttpStatusCode.NotFound,typeof(string))]
+
+        //[SwaggerResponse(HttpStatusCode.NotFound,typeof(string))]
+        [SwaggerResponse(HttpStatusCode.NotFound, typeof(ErrorDto))]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
         [HttpGet("{id}")]
         public ActionResult<RealEstateDto> GetById(int id)
@@ -38,7 +41,7 @@ namespace RealEstate.API.Controllers
 
             if (realEstate == null)
             {
-                return NotFound();
+                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with {id} id was not found"));
             }
 
             return Ok(realEstate);

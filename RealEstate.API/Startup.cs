@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using RealEstate.API.Middleware;
 using RealEstate.API.Repositiories;
+using RealEstate.API.Services;
 
 namespace RealEstate.API
 {
@@ -29,6 +30,7 @@ namespace RealEstate.API
         {
             services.AddSingleton<IRealEstateRepository,RealEstateRepository>();
             services.AddSingleton<IRealEstateNoteRepository,RealEstateNoteRepository>();
+            services.AddTransient<StatisticsCalculator>();
 
             services.AddControllers();
             services.AddSwaggerDocument();

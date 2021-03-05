@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -8,14 +9,13 @@ namespace RealEstate.API.DTO
 {
     public class ErrorDto
     {
-        public int StatusCode {get;set;}
+        public HttpStatusCode StatusCode {get;set;}
         public string Message { get; set; }
 
-        // other fields
-
-        public override string ToString()
+        public ErrorDto(HttpStatusCode statusCode, string message)
         {
-            return JsonConvert.SerializeObject(this);
+            StatusCode = statusCode;
+            Message = message;
         }
     }
 }

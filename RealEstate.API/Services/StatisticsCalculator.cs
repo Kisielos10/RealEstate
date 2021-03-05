@@ -10,15 +10,41 @@ namespace RealEstate.API.Services
     {
         public decimal CalculateMeanArea(List<RealEstateDto> realEstate)
         {
-            //TODO *zabezpiecz się przed nullem* chyba zrobiłem
-            var result = realEstate.Sum(x => x.Area);
-            if (result == 0)
+            if (realEstate == null)
+            {
+                throw new ArgumentNullException("This value should not be null");
+            }
+
+            if (realEstate.Count == 0)
             {
                 return 0;
             }
-            result /= realEstate.Count;
+
+            var sum = realEstate.Sum(x => x.Area);
+
+            var result = sum / realEstate.Count;
 
             return decimal.Round(result, 2);
+        }
+
+        public decimal CalculatePricePerMeter(List<RealEstateDto> realEstate)
+        {
+            if (realEstate == null)
+            {
+                throw new ArgumentNullException("This value should not be null");
+            }
+
+            if (realEstate.Any(dto => dto.Area < 0 ) || realEstate.Any(dto => dto.Price < 0 ))
+            {
+                throw new ArgumentOutOfRangeException("Area and Price should have a value");
+            }
+
+            var sumPrice = realEstate.Sum(x => x.Price);
+            var sumArea = realEstate.Sum(x => x.Area);
+
+            var result = sumPrice / sumArea;
+
+            return decimal.Round(result,2);
         }
         
     }

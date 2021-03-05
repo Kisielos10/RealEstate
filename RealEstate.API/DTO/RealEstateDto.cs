@@ -20,7 +20,9 @@ namespace RealEstate.API.DTO
         public int YearBuilt { get; set; }
         public decimal PricePerMeter { get; set; }
         public AddressDto Address { get; set; }
-
+        //TODO w statystykach wyliczanie price per meter + testy do tego
+        //TODO ErrorDto spróbuj w chociaz jednym endpoincie zwrócić 
+        //[SwaggerResponse(HttpStatusCode.NotFound, typeof(ErrorResponseDto), Description = "Store or job not found")]
     }
 
     public class AddressDto

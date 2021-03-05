@@ -67,7 +67,7 @@ namespace RealEstate.API.Repositiories
                 //TODO przypomnij o ErrorDto
                 CreatedAt = createRealEstateNoteDto.CreatedAt ?? DateTime.Now, 
                 Id = id,
-                RealEstateId = createRealEstateNoteDto.RealEstateId, //TODO dodaj walidacje czy istnieje realestate jeżeli nie istnieje to NotFound("RealEstate nie istnieje")
+                RealEstateId = createRealEstateNoteDto.RealEstateId,
                 Text = createRealEstateNoteDto.Text
             };
             realEstateNotes.Add(realEstateNoteDto);

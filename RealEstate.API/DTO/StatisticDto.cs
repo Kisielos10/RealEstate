@@ -10,10 +10,13 @@ namespace RealEstate.API.DTO
     {
         [Required]
         public decimal Area { get; set; }
+        [Required]
+        public decimal PricePerMeter { get; set; }
 
-        public StatisticDto(decimal area)
+        public StatisticDto(decimal area, decimal pricePerMeter)
         {
             Area = area;
+            PricePerMeter = pricePerMeter;
         }
     }
 }

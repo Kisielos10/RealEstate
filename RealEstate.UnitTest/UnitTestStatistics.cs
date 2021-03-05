@@ -9,18 +9,31 @@ namespace RealEstate.UnitTest
 {
     public class StatisticCalculationTests
     {
+        private readonly StatisticsCalculator _calculator;
+
+        public StatisticCalculationTests()
+        {
+            _calculator = new StatisticsCalculator();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestDataGenerator.GetRealEstateFromDataGenerator),MemberType = typeof(TestDataGenerator))]
+        public void CalculateMeanAreaTheory(List<RealEstateDto> realEstate)
+        {
+            var result = _calculator.CalculateMeanArea(realEstate);
+            result.Should().Be(250);
+        }
+
         [Fact]
         public void CalculateMeanArea()
         {
-            var calculator = new StatisticsCalculator();
-            var result = calculator.CalculateMeanArea(new List<RealEstateDto>());
-            result.Should().Be((0));
+            var result = _calculator.CalculateMeanArea(new List<RealEstateDto>());
+            result.Should().Be(0);
         }
         [Fact]
         public void CalculateMeanAreaForTwoRealEstates()
         {
-            var calculator = new StatisticsCalculator();
-            var result = calculator.CalculateMeanArea(new List<RealEstateDto>
+            var result = _calculator.CalculateMeanArea(new List<RealEstateDto>
             {
                 new RealEstateDto()
                 {
@@ -40,8 +53,7 @@ namespace RealEstate.UnitTest
         [Fact]
         public void CalculateMeanAreaForThreeRealEstates()
         {
-            var calculator = new StatisticsCalculator();
-            var result = calculator.CalculateMeanArea(new List<RealEstateDto>
+            var result = _calculator.CalculateMeanArea(new List<RealEstateDto>
             {
                 new RealEstateDto()
                 {
@@ -65,18 +77,24 @@ namespace RealEstate.UnitTest
             result.Should().Be(5618.59m);
         }
         [Fact]
+        public void CalculateMeanAreaNoArea()
+        {
+            var result = _calculator.CalculateMeanArea(new List<RealEstateDto> 
+            {
+                new RealEstateDto
+                {
+                    Id = 0, Price = 5000000m
+                }
+
+            });
+            result.Should().Be(0);
+        }
+        [Fact]
         public void CalculateMeanAreaNull()
         {
-            var calculator = new StatisticsCalculator();
-            var result = calculator.CalculateMeanArea(new List<RealEstateDto>
-            {
-                new RealEstateDto()
-                {
-                    Id = 0,
-                    Price = 5000000m
-                }
-            });
-            result.Should().Be((0));
+            Action act = () => _calculator.CalculateMeanArea(null);
+
+            act.Should().Throw<ArgumentNullException>().Which.Message.Should().Contain("This value should not be null");
         }
     }
 }
