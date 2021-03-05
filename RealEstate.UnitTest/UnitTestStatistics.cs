@@ -17,11 +17,11 @@ namespace RealEstate.UnitTest
         }
 
         [Theory]
-        [MemberData(nameof(TestDataGenerator.GetRealEstateFromDataGenerator),MemberType = typeof(TestDataGenerator))]
-        public void CalculateMeanAreaTheory(List<RealEstateDto> realEstate)
+        [MemberData(nameof(RealEstateTestDataGenerator.GetRealEstateFromDataGenerator),MemberType = typeof(RealEstateTestDataGenerator))]
+        public void CalculateMeanAreaTheory(List<RealEstateDto> realEstate,decimal expectedMeanArea)
         {
             var result = _calculator.CalculateMeanArea(realEstate);
-            result.Should().Be(250);
+            result.Should().Be(expectedMeanArea);
         }
 
         [Fact]

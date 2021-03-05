@@ -6,7 +6,7 @@ using RealEstate.API.DTO;
 
 namespace RealEstate.UnitTest
 {
-    class TestDataGenerator : IEnumerable<object[]>
+    internal class RealEstateTestDataGenerator 
     {
         public static IEnumerable<object[]> GetRealEstateFromDataGenerator()
         {
@@ -26,18 +26,26 @@ namespace RealEstate.UnitTest
                         Area = 300m,
                         Price = 90000000m
                     }
-                }
+                },
+                250
+            };
+
+            yield return new object[]
+            {
+                new List<RealEstateDto>
+                {
+                    new RealEstateDto
+                    {
+                        Id = 0,
+                        Area = 200m,
+                        Price = 5000000m
+                    },
+                },
+                200
             };
         }
 
-        public IEnumerator<object[]> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+
     }
 }
