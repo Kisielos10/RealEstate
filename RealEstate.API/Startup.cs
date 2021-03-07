@@ -46,6 +46,7 @@ namespace RealEstate.API
             }
 
             app.UseMiddleware<HeaderAdditionMiddleware>();
+            app.UseMiddleware<BearerTokenMiddleware>();
 
             app.UseRouting();
 

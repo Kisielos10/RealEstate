@@ -33,6 +33,7 @@ namespace RealEstate.API.Controllers
         //TODO przypomnieć o walidacji dokumentacji swaggera
         public ActionResult<StatisticDto> Get([FromQuery(Name = "type")]BuildingType? buildingType, [FromQuery(Name = "area")]decimal? area, [FromQuery(Name = "yearBuilt")]int? yearBuilt)
         {
+            //TODO MK zerknij na predykaty
             Func<RealEstateDto,bool> predicate = null;
             if (area.HasValue)
             {
@@ -52,7 +53,7 @@ namespace RealEstate.API.Controllers
             }
             var condition = _realEstateRepository.Get().Where(predicate);
             var meanArea = _calculator.CalculateMeanArea(condition.ToList());
-            var pricePerMeter = _calculator.CalculatePricePerMeter(condition.ToList());
+            var pricePerMeter = _calculator.CalculateMeanPricePerMeter(condition.ToList());
             return new StatisticDto(meanArea,pricePerMeter);
         }
 

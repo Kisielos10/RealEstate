@@ -27,7 +27,7 @@ namespace RealEstate.API.Services
             return decimal.Round(result, 2);
         }
 
-        public decimal CalculatePricePerMeter(List<RealEstateDto> realEstate)
+        public decimal CalculateMeanPricePerMeter(List<RealEstateDto> realEstate)
         {
             if (realEstate == null)
             {

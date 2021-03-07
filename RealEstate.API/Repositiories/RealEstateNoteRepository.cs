@@ -63,8 +63,6 @@ namespace RealEstate.API.Repositiories
 
             var realEstateNoteDto = new RealEstateNoteDto
             {
-                //TODO przypomnij o testach na githubie
-                //TODO przypomnij o ErrorDto
                 CreatedAt = createRealEstateNoteDto.CreatedAt ?? DateTime.Now, 
                 Id = id,
                 RealEstateId = createRealEstateNoteDto.RealEstateId,
