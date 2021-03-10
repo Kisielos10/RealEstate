@@ -6,9 +6,6 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 namespace RealEstate.API.DTO
 {
-    /// <summary>
-    /// cokolwiek
-    /// </summary>
     public class RealEstateDto
     {
         [Required]
@@ -20,7 +17,6 @@ namespace RealEstate.API.DTO
         public int YearBuilt { get; set; }
         public decimal PricePerMeter { get; set; }
         public AddressDto Address { get; set; }
-        //TODO testy do price per meter
     }
 
     public class AddressDto

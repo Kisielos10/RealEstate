@@ -14,7 +14,7 @@ namespace RealEstate.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RealEstateNotesController : ControllerBase
+    public class RealEstateNotesController : BaseController
     {
         private readonly IRealEstateNoteRepository _realEstateNotes;
         private readonly IRealEstateRepository _realEstateRepository;

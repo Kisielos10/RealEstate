@@ -34,9 +34,14 @@ namespace RealEstate.API.Services
                 throw new ArgumentNullException("This value should not be null");
             }
 
-            if (realEstate.Any(dto => dto.Area < 0 ) || realEstate.Any(dto => dto.Price < 0 ))
+            if (realEstate.All(dto => dto.Price == 0))
             {
-                throw new ArgumentOutOfRangeException("Area and Price should have a value");
+                return 0;
+            }
+
+            if (realEstate.Any(dto => dto.Area <= 0 ) || realEstate.Any(dto => dto.Price <= 0 ))
+            {
+                throw new ArgumentOutOfRangeException("Area and Price should have a valid value");
             }
 
             var sumPrice = realEstate.Sum(x => x.Price);

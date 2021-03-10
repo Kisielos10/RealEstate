@@ -16,7 +16,7 @@ namespace RealEstate.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StatisticsController : ControllerBase
+    public class StatisticsController : BaseController
     {
         private readonly IRealEstateRepository _realEstateRepository;
         private readonly StatisticsCalculator _calculator;
@@ -30,7 +30,6 @@ namespace RealEstate.API.Controllers
 
         [HttpGet]
         [SwaggerResponse(HttpStatusCode.OK,typeof(StatisticDto))]
-        //TODO przypomnieć o walidacji dokumentacji swaggera
         public ActionResult<StatisticDto> Get([FromQuery(Name = "type")]BuildingType? buildingType, [FromQuery(Name = "area")]decimal? area, [FromQuery(Name = "yearBuilt")]int? yearBuilt)
         {
             //TODO MK zerknij na predykaty

@@ -27,7 +27,7 @@ namespace RealEstate.UnitTest
                         Price = 90000000m
                     }
                 },
-                250
+                new ExpectedStatistics(250,190000m)
             };
 
             yield return new object[]
@@ -41,7 +41,7 @@ namespace RealEstate.UnitTest
                         Price = 5000000m
                     },
                 },
-                200
+                new ExpectedStatistics(200,25000)
             };
 
             yield return new object[]
@@ -50,7 +50,7 @@ namespace RealEstate.UnitTest
                 {
                     new RealEstateDto()
                 },
-                0
+                new ExpectedStatistics(0, 0)
             };
 
             yield return new object[]
@@ -76,7 +76,7 @@ namespace RealEstate.UnitTest
                         Price = 90000m
                     }
                 },
-                5618.59m
+                new ExpectedStatistics(5618.59m, 5641.39m)
             };
         }
     }

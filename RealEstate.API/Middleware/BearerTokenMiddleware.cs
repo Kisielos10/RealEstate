@@ -21,13 +21,14 @@ namespace RealEstate.API.Middleware
 
         public async Task Invoke(HttpContext httpContext)
         {
-            httpContext.Request.Headers.TryGetValue("secret_token",out var value);
-            //TODO sprawdz czy jest token jezeli jest i ma dobra wartosc to nic a jeżeli nie ma to zwracam unathorized i przerwać *Shortcircuting*
-            if (!(value=="secret_token" && string.IsNullOrWhiteSpace(value)))
+            if (httpContext.Request.Headers.TryGetValue("secret_token",out var value))
             {
-                return;
+                if (value == "123")
+                {
+                    await _next.Invoke(httpContext);
+                }
             }
-            await _next.Invoke(httpContext);
+            httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
         }
     }
 }

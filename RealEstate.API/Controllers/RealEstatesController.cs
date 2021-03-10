@@ -13,7 +13,8 @@ namespace RealEstate.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RealEstatesController : ControllerBase
+    [SwaggerResponse(HttpStatusCode.InternalServerError, typeof(ErrorDto))]
+    public class RealEstatesController : BaseController
     {
         private readonly IRealEstateRepository _realEstateRepository;
 
@@ -32,6 +33,12 @@ namespace RealEstate.API.Controllers
 
 
         //[SwaggerResponse(HttpStatusCode.NotFound,typeof(string))]
+        /// <summary>
+        /// <see cref="RealEstateDto"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        //TODO zobacz czy da się spiąć ze swaggerem
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(ErrorDto))]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
         [HttpGet("{id}")]
