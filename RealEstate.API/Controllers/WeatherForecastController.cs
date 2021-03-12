@@ -3,7 +3,10 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using NSwag.Annotations;
+using RealEstate.API.DTO;
 
 namespace RealEstate.API.Controllers
 {
@@ -24,6 +27,7 @@ namespace RealEstate.API.Controllers
         }
 
         [HttpGet]
+        [SwaggerResponse(HttpStatusCode.OK,typeof(WeatherForecast))]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
