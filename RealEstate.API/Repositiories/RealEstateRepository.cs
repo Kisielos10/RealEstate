@@ -41,5 +41,19 @@ namespace RealEstate.API.Repositiories
 
             return realEstate;
         }
+
+        public RealEstateDto Update(UpdateRealEstateDto realEstate, int id)
+        {
+            var realEstateToUpdate = realEstateDtos.SingleOrDefault(x => x.Id.Equals(id));
+
+            realEstateToUpdate.Price = realEstate.Price;
+            realEstateToUpdate.Address = realEstate.Address;
+            realEstateToUpdate.Area = realEstate.Area;
+            realEstateToUpdate.Type = realEstate.Type;
+            realEstateToUpdate.YearBuilt = realEstate.YearBuilt;
+            
+
+            return realEstateToUpdate;
+        }
     }
 }

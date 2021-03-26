@@ -79,6 +79,8 @@ namespace RealEstate.API.Controllers
 
             return Created(new Uri($"{Request.Path}/{result.Id}",UriKind.Relative) ,result);
         }
-        
+
+
+
     }
 }

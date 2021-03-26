@@ -33,7 +33,13 @@ namespace RealEstate.API
             services.AddTransient<StatisticsCalculator>();
 
             services.AddControllers();
-            services.AddSwaggerDocument();
+            services.AddSwaggerDocument(c =>
+            {
+                c.GenerateXmlObjects = true;
+            });
+
+            services.AddResponseCaching();
+            services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,17 +56,17 @@ namespace RealEstate.API
 
             app.UseRouting();
 
-            //app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
             app.UseOpenApi();
             app.UseSwaggerUi3();
-            
+
             app.UseDeveloperExceptionPage();
 
+            app.UseResponseCaching();
+            app.UseMvc();
         }
     }
 }

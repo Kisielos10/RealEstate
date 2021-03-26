@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Net.Sockets;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+
 namespace RealEstate.API.DTO
 {
     public class RealEstateDto
@@ -17,6 +15,7 @@ namespace RealEstate.API.DTO
         public int YearBuilt { get; set; }
         public decimal PricePerMeter { get; set; }
         public AddressDto Address { get; set; }
+        //public List<IFormFile> Files { get; set; }
     }
 
     public class AddressDto

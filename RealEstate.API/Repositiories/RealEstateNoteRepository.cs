@@ -72,10 +72,5 @@ namespace RealEstate.API.Repositiories
 
             return realEstateNoteDto;
         }
-
-        public bool Put(RealEstateNoteDto realEstateNoteDto, int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
