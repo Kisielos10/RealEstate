@@ -21,4 +21,9 @@ jobs:
       run: dotnet restore
     - name: Publish
       run: dotnet publish RealEstate.API -r win-x64 --self-contained=true -p:PublishSingleFile=true
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: Real_Estate_API
+        path: RealEstate/RealEstate.API/bin/Debug/netcoreapp3.1/win-x64/publish
 
