@@ -44,13 +44,13 @@ namespace RealEstate.API.Repositiories
 
         public RealEstateDto Update(UpdateRealEstateDto realEstate, int id)
         {
-            var realEstateToUpdate = realEstateDtos.SingleOrDefault(x => x.Id.Equals(id));
+            var realEstateToUpdate = realEstateDtos.FirstOrDefault(x => x.Id.Equals(id));
 
-            realEstateToUpdate.Price = realEstate.Price;
-            realEstateToUpdate.Address = realEstate.Address;
-            realEstateToUpdate.Area = realEstate.Area;
-            realEstateToUpdate.Type = realEstate.Type;
-            realEstateToUpdate.YearBuilt = realEstate.YearBuilt;
+            realEstateToUpdate.Price = realEstate.Price ?? realEstateToUpdate.Price;
+            realEstateToUpdate.Address = realEstate.Address ?? realEstateToUpdate.Address;
+            realEstateToUpdate.Area = realEstate.Area ?? realEstateToUpdate.Area;
+            realEstateToUpdate.Type = realEstate.Type ?? realEstateToUpdate.Type;
+            realEstateToUpdate.YearBuilt = realEstate.YearBuilt ?? realEstateToUpdate.YearBuilt;
             
 
             return realEstateToUpdate;

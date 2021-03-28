@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
@@ -15,7 +16,7 @@ namespace RealEstate.API.DTO
         public int YearBuilt { get; set; }
         public decimal PricePerMeter { get; set; }
         public AddressDto Address { get; set; }
-        //public List<IFormFile> Files { get; set; }
+        public List<Uri> Files { get; set; }
     }
 
     public class AddressDto

@@ -38,7 +38,6 @@ namespace RealEstate.UnitTest
                 foreach (var method in methods)
                 {
                     method.Should().BeDecoratedWith<SwaggerResponseAttribute>();
-                    //TODO zrobić żeby github generował exe
                     //check if the method has SwaggerResponse attribute  
                     //var result = Attribute.IsDefined(method, typeof(SwaggerResponseAttribute));
                     //Assert.True(result, $"{method.Name} should be declared with SwaggerResponse Attribute");

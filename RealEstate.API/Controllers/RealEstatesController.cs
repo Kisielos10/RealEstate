@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -33,13 +34,14 @@ namespace RealEstate.API.Controllers
             return realEstate;
         }
         //TODO dodawać i usuwać zdjęcia do real estate
-        //TODO dodać Put i osobny DTO(gdzie sa sensowne rzeczy) do update'owania real estate
-        //TODO dodaj cache'owanie do jednego lub więcej GET'a (będzie widac przy debuggowaniu)
+        //TODO dodać Delete i Post
+        //TODO dodaj lepsze cache'owanie (server side)
         //TODO zacząć baze
         /// <summary>
         /// Just a regular get endpoint
+        /// <see cref="RealEstateDto"/>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">bla bla bla</param>
         /// <returns></returns>
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(ErrorDto))]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
@@ -56,22 +58,20 @@ namespace RealEstate.API.Controllers
             return Ok(realEstate);
         }
 
-        [SwaggerResponse(HttpStatusCode.BadRequest,typeof(ErrorDto))]
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(ErrorDto))]
         [SwaggerResponse(HttpStatusCode.Created, typeof(RealEstateDto))]
         [HttpPut]
-        public ActionResult<RealEstateNoteDto> Update([FromBody] UpdateRealEstateDto updateRealEstateNoteDto,
+        public ActionResult<RealEstateDto> Update([FromBody] UpdateRealEstateDto updateRealEstateDto,
             [FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with {id} id is not valid"));
-            if (updateRealEstateNoteDto == null)
+
+            if (updateRealEstateDto == null)
             {
                 return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with {id} id was not found"));
             }
 
 
-            var result = _realEstateRepository.Update(updateRealEstateNoteDto, id);
+            var result = _realEstateRepository.Update(updateRealEstateDto, id);
 
             return CreatedAtAction("update",new {id = result.Id},result);
         }
