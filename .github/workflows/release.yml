@@ -25,5 +25,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Real_Estate_API
-        path: RealEstate.API/bin/Debug/netcoreapp3.1/win-x64/publish
+        path: RealEstate/RealEstate.API/bin/Debug/netcoreapp3.1/win-x64/publish
 
