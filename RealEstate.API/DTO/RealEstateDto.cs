@@ -12,7 +12,7 @@ namespace RealEstate.API.DTO
         [Range(0,20000000)]
         public decimal Price { get; set; }
         public decimal Area { get; set; }
-        public BuildingType Type { get; set; }
+        public BuildingType BuildingType { get; set; }
         public int YearBuilt { get; set; }
         public decimal PricePerMeter { get; set; }
         public AddressDto Address { get; set; }

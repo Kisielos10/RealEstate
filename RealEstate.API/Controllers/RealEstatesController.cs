@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NSwag.Annotations;
 using RealEstate.API.DTO;
 using RealEstate.API.Repositiories;
@@ -20,23 +22,26 @@ namespace RealEstate.API.Controllers
     {
         private readonly IRealEstateRepository _realEstateRepository;
 
-        public RealEstatesController( IRealEstateRepository realEstateRepository)
+
+
+        public RealEstatesController(IRealEstateRepository realEstateRepository)
         {
             _realEstateRepository = realEstateRepository;
+
         }
+
 
         [HttpGet]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
-        [ResponseCache(Duration =  60, Location = ResponseCacheLocation.Any)]
-        public IEnumerable<RealEstateDto> Get()
+        //[ResponseCache(Duration =  60, Location = ResponseCacheLocation.Any)]
+        public ActionResult<RealEstateDto> Get()
         {
             var realEstate = _realEstateRepository.Get();
-            return realEstate;
+            return Ok(realEstate);
         }
-        //TODO dodawać i usuwać zdjęcia do real estate
-        //TODO dodać Delete i Post
+        //TODO dodawać i usuwać zdjęcia do real estate blob storage
         //TODO dodaj lepsze cache'owanie (server side)
-        //TODO zacząć baze
+        //TODO oData
         /// <summary>
         /// Just a regular get endpoint
         /// <see cref="RealEstateDto"/>
@@ -60,20 +65,46 @@ namespace RealEstate.API.Controllers
 
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(ErrorDto))]
         [SwaggerResponse(HttpStatusCode.Created, typeof(RealEstateDto))]
-        [HttpPut]
+        [HttpPut("{id}")]
         public ActionResult<RealEstateDto> Update([FromBody] UpdateRealEstateDto updateRealEstateDto,
             [FromRoute] int id)
         {
-
-            if (updateRealEstateDto == null)
+            //TODO dodać walidację id bo ta jest brzydka
+            if (_realEstateRepository.GetById(id) == null)
             {
                 return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with {id} id was not found"));
             }
 
-
             var result = _realEstateRepository.Update(updateRealEstateDto, id);
 
             return CreatedAtAction("update",new {id = result.Id},result);
+        }
+
+        [SwaggerResponse(HttpStatusCode.NotFound,typeof(ErrorDto))]
+        [SwaggerResponse(HttpStatusCode.NoContent,typeof(RealEstateDto))]
+        [HttpDelete("{id}")]
+        public ActionResult<RealEstateDto> Delete([FromRoute]int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with {id} id is not valid"));
+
+            var realEstate = _realEstateRepository.Delete(id);
+
+            if (realEstate == null)
+            {
+                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with {id} id was not found"));
+            }
+
+            return NoContent();
+
+        }
+        [SwaggerResponse(HttpStatusCode.Created,typeof(RealEstateDto))]
+        [HttpPost]
+        public ActionResult<RealEstateDto> Post([FromBody] CreateRealEstateDto createRealEstateDto )
+        {
+            var result = _realEstateRepository.Add(createRealEstateDto);
+
+            return Created(new Uri($"{Request.Path}/{result.Id}",UriKind.Relative) ,result);
         }
 
         [SwaggerResponse(HttpStatusCode.OK,typeof(object))]

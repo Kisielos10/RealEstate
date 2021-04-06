@@ -8,7 +8,7 @@ namespace RealEstate.API.Repositiories
 {
     public interface IRealEstateNoteRepository
     {
-        RealEstateNoteDto GetById(int i);
+        RealEstateNoteDto GetById(int id);
         bool Delete(int id);
         RealEstateNoteDto Add(CreateRealEstateNoteDto createRealEstateNoteDto);
     }

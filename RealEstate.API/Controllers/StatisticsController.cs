@@ -32,7 +32,6 @@ namespace RealEstate.API.Controllers
         [SwaggerResponse(HttpStatusCode.OK,typeof(StatisticDto))]
         public ActionResult<StatisticDto> Get([FromQuery(Name = "type")]BuildingType? buildingType, [FromQuery(Name = "area")]decimal? area, [FromQuery(Name = "yearBuilt")]int? yearBuilt)
         {
-            //TODO MK zerknij na predykaty
             Func<RealEstateDto,bool> predicate = null;
             if (area.HasValue)
             {
@@ -44,16 +43,17 @@ namespace RealEstate.API.Controllers
             }
             else if (buildingType.HasValue)
             {
-                predicate = dto => dto.Type == buildingType.Value;
+                predicate = dto => dto.BuildingType == buildingType.Value;
             }
             else
             {
                 predicate = dto => true;
             }
-            var condition = _realEstateRepository.Get().Where(predicate);
-            var meanArea = _calculator.CalculateMeanArea(condition.ToList());
-            var pricePerMeter = _calculator.CalculateMeanPricePerMeter(condition.ToList());
-            return new StatisticDto(meanArea,pricePerMeter);
+            //var condition = _realEstateRepository.Get().Where(predicate);
+            //var meanArea = _calculator.CalculateMeanArea(condition.ToList());
+            //var pricePerMeter = _calculator.CalculateMeanPricePerMeter(condition.ToList());
+            //return new StatisticDto(meanArea,pricePerMeter);
+            return new StatisticDto(10001,100001);
         }
 
     }

@@ -32,11 +32,29 @@ namespace RealEstate.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with {id} id is not valid"));
 
-            var realEstateNote = _realEstateNotes.GetById(id);
+            var realEstateNote = _realEstateRepository.GetById(id);
 
             if (realEstateNote == null)
             {
                 return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate Note with {id} id was not found"));
+            }
+
+            return Ok(realEstateNote);
+        }
+        [SwaggerResponse(HttpStatusCode.NotFound,typeof(ErrorDto))]
+        [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateNoteDto))]
+        [HttpGet("{realEstateId}")]
+        public ActionResult<RealEstateNoteDto> GetByRealEstateId(int realEstateId)
+        {
+            //TODO dokończyć
+            if (!ModelState.IsValid)
+                return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with {realEstateId} id is not valid"));
+
+            var realEstateNote = _realEstateNotes.GetById(realEstateId);
+
+            if (realEstateNote == null)
+            {
+                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate Note with {realEstateId} id was not found"));
             }
 
             return Ok(realEstateNote);

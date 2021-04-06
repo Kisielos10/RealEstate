@@ -9,7 +9,11 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using RealEstate.API.Infrastructure;
 using RealEstate.API.Middleware;
 using RealEstate.API.Repositiories;
 using RealEstate.API.Services;
@@ -28,8 +32,8 @@ namespace RealEstate.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IRealEstateRepository,RealEstateRepository>();
-            services.AddSingleton<IRealEstateNoteRepository,RealEstateNoteRepository>();
+            services.AddTransient<IRealEstateRepository,RealEstateRepository>();
+            services.AddTransient<IRealEstateNoteRepository,RealEstateNoteRepository>();
             services.AddTransient<StatisticsCalculator>();
 
             services.AddControllers();
@@ -40,6 +44,28 @@ namespace RealEstate.API
 
             services.AddResponseCaching();
             //services.AddMvc(options => options.EnableEndpointRouting = false);
+
+            
+            services.AddDbContext<RealEstateDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("RealEstateContext")));
+
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
+            // Chyba bez sensu tego uzywac jak i to i to dziala
+            //var config = new MapperConfiguration(cfg =>
+            //{
+            //    //cfg.AddProfile(new RealEstateProfile());
+            //    cfg.AddMaps(typeof(RealEstateProfile).Assembly);
+            //});
+
+            //var mapper = config.CreateMapper();
+
+            //services.AddSingleton(mapper);
+
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,7 +89,7 @@ namespace RealEstate.API
             app.UseOpenApi();
             app.UseSwaggerUi3();
 
-            app.UseDeveloperExceptionPage();
+            //app.UseDeveloperExceptionPage();
 
             app.UseResponseCaching();
             //app.UseMvc();

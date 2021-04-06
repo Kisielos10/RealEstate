@@ -4,7 +4,9 @@ using System.Data;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
+using AutoMapper;
 using RealEstate.API.DTO;
+using RealEstate.API.Persistence;
 
 namespace RealEstate.API.Repositiories
 {
@@ -35,6 +37,15 @@ namespace RealEstate.API.Repositiories
             }
         };
 
+        private readonly RealEstateDbContext _context;
+        private readonly IMapper _mapper;
+
+        public RealEstateNoteRepository(RealEstateDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
         public bool Delete(int id)
         {
             var realEstateNote = realEstateNotes.FirstOrDefault(x => x.Id == id);
@@ -44,9 +55,20 @@ namespace RealEstate.API.Repositiories
 
         public RealEstateNoteDto GetById(int id)
         {
-            var realEstateNote = realEstateNotes.FirstOrDefault(x => x.Id == id);
+            ////TODO nie wiem czemu nie mogęzrobić FirstOrDefault na RealEstateNotes
+            ////var realEstateNote = _context.RealEstates.FirstOrDefault(opt => opt.RealEstateNotes.FirstOrDefault(note => note.Id == id));
 
-            return realEstateNote;
+            //var realEstateNote = _context.RealEstateNotes.RealEstateId;
+
+            //var mappedRealEstateNote = _mapper.Map<RealEstateNoteDto>(realEstateNote);
+
+            //return mappedRealEstateNote;
+
+            //var realEstateNote = _context.RealEstateNotes;
+
+            //var mappedRealEstateNote = _mapper.Map<RealEstateDto>(realEstateNote);
+
+            return null;
         }
 
         public RealEstateNoteDto Add(CreateRealEstateNoteDto createRealEstateNoteDto)
