@@ -51,17 +51,6 @@ namespace RealEstate.API
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            // Chyba bez sensu tego uzywac jak i to i to dziala
-            //var config = new MapperConfiguration(cfg =>
-            //{
-            //    //cfg.AddProfile(new RealEstateProfile());
-            //    cfg.AddMaps(typeof(RealEstateProfile).Assembly);
-            //});
-
-            //var mapper = config.CreateMapper();
-
-            //services.AddSingleton(mapper);
-
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);

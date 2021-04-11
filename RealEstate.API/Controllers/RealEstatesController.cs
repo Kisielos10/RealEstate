@@ -6,12 +6,18 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using NSwag.Annotations;
 using RealEstate.API.DTO;
+using RealEstate.API.Persistence;
 using RealEstate.API.Repositiories;
+using System.Drawing;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Image = System.Drawing.Image;
 
 namespace RealEstate.API.Controllers
 {
@@ -21,13 +27,13 @@ namespace RealEstate.API.Controllers
     public class RealEstatesController : BaseController
     {
         private readonly IRealEstateRepository _realEstateRepository;
+        private readonly RealEstateDbContext _context;
 
 
-
-        public RealEstatesController(IRealEstateRepository realEstateRepository)
+        public RealEstatesController(IRealEstateRepository realEstateRepository, RealEstateDbContext context)
         {
             _realEstateRepository = realEstateRepository;
-
+            _context = context;
         }
 
 
@@ -69,7 +75,6 @@ namespace RealEstate.API.Controllers
         public ActionResult<RealEstateDto> Update([FromBody] UpdateRealEstateDto updateRealEstateDto,
             [FromRoute] int id)
         {
-            //TODO dodać walidację id bo ta jest brzydka
             if (_realEstateRepository.GetById(id) == null)
             {
                 return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with {id} id was not found"));
@@ -81,19 +86,16 @@ namespace RealEstate.API.Controllers
         }
 
         [SwaggerResponse(HttpStatusCode.NotFound,typeof(ErrorDto))]
-        [SwaggerResponse(HttpStatusCode.NoContent,typeof(RealEstateDto))]
+        [SwaggerResponse(HttpStatusCode.NoContent,typeof(string))]
         [HttpDelete("{id}")]
-        public ActionResult<RealEstateDto> Delete([FromRoute]int id)
+        public ActionResult Delete([FromRoute]int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with {id} id is not valid"));
-
-            var realEstate = _realEstateRepository.Delete(id);
-
-            if (realEstate == null)
+            if (_realEstateRepository.GetById(id) == null)
             {
                 return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with {id} id was not found"));
             }
+
+            _realEstateRepository.Delete(id);
 
             return NoContent();
 
@@ -108,27 +110,47 @@ namespace RealEstate.API.Controllers
         }
 
         [SwaggerResponse(HttpStatusCode.OK,typeof(object))]
-        [HttpPost("Upload")]
-        public async Task<IActionResult> OnPostUploadAsync(List<IFormFile> files)
+        [HttpPost("upload")]
+        //public async Task<IActionResult> OnPostUploadAsync(List<IFormFile> files)
+        public ActionResult<Guid> UploadImage(List<IFormFile> files)
         {
-            var size = files.Sum(f => f.Length);
 
-            foreach (var formFile in files)
+            foreach(var file in files)
             {
-                if (formFile.Length > 0)
+                var img = new Persistence.Image
                 {
-                    var filePath = Path.GetTempFileName();
+                    ImageTitle = file.FileName,
+                    Suffix = Path.GetExtension(file.FileName)
+                };
 
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
-                }
+                var ms = new MemoryStream();
+                file.CopyTo(ms);
+                img.ImageData = ms.ToArray();
+
+                ms.Close();
+                ms.Dispose();
+
+                _context.Images.Add(img);
+                _context.SaveChanges();
+
+                return img.Id;
             }
 
-            // Process uploaded files
+            return Guid.Empty;
 
-            return Ok(new { count = files.Count, size });
+        }
+        [HttpPost("Retrieve")]
+        [SwaggerResponse(HttpStatusCode.OK,typeof(Image))]
+        public ActionResult<System.Drawing.Image> RetrieveImage()
+        {
+            var img = _context.Images.FirstOrDefault(opt => opt.Id == Guid.Empty);
+
+            using var ms = new MemoryStream(img.ImageData);
+
+            var returnImage = Image.FromStream(ms);
+
+            return Ok(returnImage);
+
         }
     }
 }

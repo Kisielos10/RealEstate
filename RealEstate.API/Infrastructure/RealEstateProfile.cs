@@ -14,17 +14,12 @@ namespace RealEstate.API.Infrastructure
         public RealEstateProfile()
         {
             CreateMap<Persistence.RealEstate, RealEstateDto>()
-                //.ForMember(dest => dest.Address, opt =>
-                //{
-                //    //TODO Tego nie wiem jak zrobić
-                //    opt.MapFrom(src => CreateMap<RealEstateAddress,AddressDto>());
-                //})
-                //TODO zaokrągalnie decimal
-                //.ForMember(dest => typeof(decimal), opt => opt.ConvertUsing(Math.Round(context,2)))
+                .ForMember(dest => dest.BuildingType, opt => opt.MapFrom(src => src.BuildingType))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.RealEstateAddress))
                 .ForMember(dest => dest.PricePerMeter, opt =>
                 {
                     opt.PreCondition(src => src.Area > 0);
-                    opt.MapFrom(src => src.Price / src.Area);
+                    opt.MapFrom(src => decimal.Round(src.Price / src.Area, 2));
                 });
                 //.ReverseMap();
         }

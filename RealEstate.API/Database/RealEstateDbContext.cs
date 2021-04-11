@@ -11,7 +11,8 @@ namespace RealEstate.API
     {
         public DbSet<Persistence.RealEstate> RealEstates { get; set; }
         public DbSet<RealEstateAddress> RealEstateAddresses { get; set; }
-        public RealEstateNote RealEstateNotes { get; set; }
+        public DbSet<RealEstateNote> RealEstateNotes { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         public RealEstateDbContext(DbContextOptions<RealEstateDbContext> options) : base(options)
         {
@@ -20,8 +21,20 @@ namespace RealEstate.API
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
-        //    modelBuilder.Entity<Persistence.RealEstate>().OwnsOne(typeof(RealEstateAddress),"RealEstateAddress");
+        //    modelBuilder
+        //        .Entity<Persistence.RealEstate>()
+        //        .Property(e => e.BuildingType)
+        //        .HasConversion(
+        //            v => v.ToString(),
+        //            v => (BuildingType)Enum.Parse(typeof(BuildingType), v));
         //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<Persistence.RealEstate>()
+                .Property(e => e.BuildingType)
+                .HasDefaultValue(BuildingType.Other);
+        }
 
     }
 }

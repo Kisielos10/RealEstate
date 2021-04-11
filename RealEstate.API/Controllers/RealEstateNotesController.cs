@@ -44,9 +44,9 @@ namespace RealEstate.API.Controllers
         [SwaggerResponse(HttpStatusCode.NotFound,typeof(ErrorDto))]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateNoteDto))]
         [HttpGet("{realEstateId}")]
-        public ActionResult<RealEstateNoteDto> GetByRealEstateId(int realEstateId)
+        public ActionResult<List<RealEstateNoteDto>> GetByRealEstateId([FromQuery]int realEstateId)
         {
-            //TODO dokończyć
+            //TODO przerobić żeby nie było błędu
             if (!ModelState.IsValid)
                 return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with {realEstateId} id is not valid"));
 
@@ -61,22 +61,18 @@ namespace RealEstate.API.Controllers
         }
 
         [SwaggerResponse(HttpStatusCode.NotFound,typeof(ErrorDto))]
-        [SwaggerResponse(HttpStatusCode.NoContent,typeof(ErrorDto))]
+        [SwaggerResponse(HttpStatusCode.NoContent,typeof(string))]
         [HttpDelete("{id}")]
-        public ActionResult<RealEstateNoteDto> Delete([FromRoute]int id)
+        public ActionResult Delete([FromRoute]int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with {id} id is not valid"));
-
-            var realEstateNote = _realEstateNotes.Delete(id);
-
-            if (realEstateNote)
+            if (_realEstateRepository.GetById(id)== null)
             {
-                return NoContent();
+                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate Note with {id} id was not found"));
             }
 
-            return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate Note with {id} id was not found"));
+            _realEstateNotes.Delete(id);
 
+            return NoContent();
         }
 
         [SwaggerResponse(HttpStatusCode.Created,typeof(CreateRealEstateNoteDto))]

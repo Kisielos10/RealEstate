@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,7 @@ namespace RealEstate.API.Repositiories
                 BuildingType = createRealEstateDto.Type ?? BuildingType.Other,
                 YearBuilt = createRealEstateDto.YearBuilt,
                 //TODO dodać jakąś walidacje
-                RealEstateAddress = new RealEstateAddress()
+                RealEstateAddress = new RealEstateAddress
                 {
                     ApartmentNumber = createRealEstateDto.Address.ApartmentNumber,
                     BuildingNumber = createRealEstateDto.Address.BuildingNumber,
@@ -49,32 +50,34 @@ namespace RealEstate.API.Repositiories
             return mappedRealEstate;
         }
 
-        public RealEstateDto Delete(int id)
+        public void Delete(int id)
         {
-            // if (_context.RealEstates.Any(r => r.Id != id)) czemu to nie dzialalo
-            if (!_context.RealEstates.Any(r => r.Id == id))
-            {
-                return null;
-            }
-
             var realEstate = _context.RealEstates.FirstOrDefault(x => x.Id == id);
 
-            var mappedRealEstate = _mapper.Map<RealEstateDto>(realEstate);
+            if (realEstate == null)
+            {
+                throw new ArgumentException($"Real Estate with id {id} does not exist");
+            }
 
             _context.RealEstates.Remove(realEstate);
 
             _context.SaveChanges();
-            //Nie muszę tutaj nic zwracać
-            return mappedRealEstate;
+
         }
 
         public List<RealEstateDto> Get()
         {
             var realEstate = _context.RealEstates.ToList();
             //Tak trzeba robić
+            //todo czemu nie wyświetla building type?
             var mappedRealEstate = _mapper.Map<List<Persistence.RealEstate>,List<RealEstateDto>>(realEstate);
 
             return mappedRealEstate;
+        }
+
+        public List<RealEstateDto> Get(Expression<Func<Persistence.RealEstate, bool>> filterExpression)
+        {
+            throw new NotImplementedException();
         }
 
         public RealEstateDto GetById(int id)
@@ -90,11 +93,11 @@ namespace RealEstate.API.Repositiories
         {
             var realEstateToUpdate = _context.RealEstates.FirstOrDefault(opt => opt.Id == id);
 
-            //_context.Entry(realEstateToUpdate).State = EntityState.Modified; Nie wiem czy to potrzebne ani po co to
             if (realEstateToUpdate == null) return null;
 
             realEstateToUpdate.Price = realEstate.Price ?? realEstateToUpdate.Price;
-            //realEstateToUpdate.Address = realEstate.Address ?? realEstateToUpdate.Address;
+            //todo to trzeba zmapować i zapisać
+            //realEstateToUpdate.RealEstateAddress = realEstate.Address ?? realEstateToUpdate.RealEstateAddress;
             realEstateToUpdate.Area = realEstate.Area ?? realEstateToUpdate.Area;
             realEstateToUpdate.BuildingType = realEstate.Type ?? realEstateToUpdate.BuildingType;
             realEstateToUpdate.YearBuilt = realEstate.YearBuilt ?? realEstateToUpdate.YearBuilt;
