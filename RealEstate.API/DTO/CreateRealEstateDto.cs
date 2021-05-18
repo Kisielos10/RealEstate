@@ -15,7 +15,6 @@ namespace RealEstate.API.DTO
         [Required] 
         public BuildingType? Type { get; set; }
         public AddressDto Address { get; set; }
-        public List<Uri> Files { get; set; }
         public int YearBuilt { get; set; }
 
 

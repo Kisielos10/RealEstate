@@ -10,8 +10,8 @@ using RealEstate.API;
 namespace RealEstate.API.Migrations
 {
     [DbContext(typeof(RealEstateDbContext))]
-    [Migration("20210406140627_Initial7")]
-    partial class Initial7
+    [Migration("20210421160010_AddedEnumConversionString")]
+    partial class AddedEnumConversionString
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,27 @@ namespace RealEstate.API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("RealEstate.API.Persistence.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImageTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Suffix")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Images");
+                });
 
             modelBuilder.Entity("RealEstate.API.Persistence.RealEstate", b =>
                 {
@@ -31,8 +52,9 @@ namespace RealEstate.API.Migrations
                     b.Property<decimal>("Area")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("BuildingType")
-                        .HasColumnType("int");
+                    b.Property<string>("BuildingType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -70,7 +92,7 @@ namespace RealEstate.API.Migrations
 
                     b.HasIndex("RealEstateId");
 
-                    b.ToTable("RealEstateNote");
+                    b.ToTable("RealEstateNotes");
                 });
 
             modelBuilder.Entity("RealEstate.API.Persistence.RealEstate", b =>

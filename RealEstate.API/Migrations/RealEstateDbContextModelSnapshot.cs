@@ -21,9 +21,10 @@ namespace RealEstate.API.Migrations
 
             modelBuilder.Entity("RealEstate.API.Persistence.Image", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<byte[]>("ImageData")
                         .HasColumnType("varbinary(max)");
@@ -49,10 +50,9 @@ namespace RealEstate.API.Migrations
                     b.Property<decimal>("Area")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("BuildingType")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                    b.Property<string>("BuildingType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");

@@ -2,18 +2,18 @@
 
 namespace RealEstate.API.Migrations
 {
-    public partial class Initial12 : Migration
+    public partial class AddedEnumConversion : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
+            migrationBuilder.AlterColumn<string>(
                 name: "BuildingType",
                 table: "RealEstates",
-                type: "int",
+                type: "nvarchar(max)",
                 nullable: false,
-                defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int",
+                oldDefaultValue: 0);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -23,9 +23,9 @@ namespace RealEstate.API.Migrations
                 table: "RealEstates",
                 type: "int",
                 nullable: false,
-                oldClrType: typeof(int),
-                oldType: "int",
-                oldDefaultValue: 0);
+                defaultValue: 0,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)");
         }
     }
 }

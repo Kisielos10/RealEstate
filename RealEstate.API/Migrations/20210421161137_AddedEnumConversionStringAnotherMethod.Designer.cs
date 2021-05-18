@@ -10,8 +10,8 @@ using RealEstate.API;
 namespace RealEstate.API.Migrations
 {
     [DbContext(typeof(RealEstateDbContext))]
-    [Migration("20210411131651_Initial14")]
-    partial class Initial14
+    [Migration("20210421161137_AddedEnumConversionStringAnotherMethod")]
+    partial class AddedEnumConversionStringAnotherMethod
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,9 +23,10 @@ namespace RealEstate.API.Migrations
 
             modelBuilder.Entity("RealEstate.API.Persistence.Image", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<byte[]>("ImageData")
                         .HasColumnType("varbinary(max)");
@@ -51,10 +52,9 @@ namespace RealEstate.API.Migrations
                     b.Property<decimal>("Area")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("BuildingType")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                    b.Property<string>("BuildingType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");

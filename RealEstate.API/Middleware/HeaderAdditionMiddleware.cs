@@ -18,7 +18,7 @@ namespace RealEstate.API.Middleware
 
         public async Task Invoke(HttpContext httpContext)
         {
-            httpContext.Response.Headers.Add("super_secret",new StringValues("abc"));
+            httpContext.Response.Headers.Add("super_secret",new StringValues(Guid.NewGuid().ToString()));
             await _next.Invoke(httpContext);
         }
     }

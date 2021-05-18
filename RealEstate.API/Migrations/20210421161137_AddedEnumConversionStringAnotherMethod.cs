@@ -2,7 +2,7 @@
 
 namespace RealEstate.API.Migrations
 {
-    public partial class Initial9 : Migration
+    public partial class AddedEnumConversionStringAnotherMethod : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

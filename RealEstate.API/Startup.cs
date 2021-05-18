@@ -1,22 +1,15 @@
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using RealEstate.API.Infrastructure;
+using RealEstate.API.DTO;
 using RealEstate.API.Middleware;
 using RealEstate.API.Repositiories;
 using RealEstate.API.Services;
+using RealEstate.API.Validators;
 
 namespace RealEstate.API
 {
@@ -36,7 +29,7 @@ namespace RealEstate.API
             services.AddTransient<IRealEstateNoteRepository,RealEstateNoteRepository>();
             services.AddTransient<StatisticsCalculator>();
 
-            services.AddControllers();
+            
             services.AddSwaggerDocument(c =>
             {
                 c.GenerateXmlObjects = true;
@@ -53,8 +46,12 @@ namespace RealEstate.API
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddMvc()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateRealEstateDtoValidator>());
 
+           services.AddControllers()
+               .AddNewtonsoftJson(options =>
+                   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,10 +63,13 @@ namespace RealEstate.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMiddleware<HeaderAdditionMiddleware>();
             //app.UseMiddleware<BearerTokenMiddleware>();
+            app.UseMiddleware<HeaderAdditionMiddleware>();
 
             app.UseRouting();
+
+            app.UseResponseCaching();
+
 
             app.UseEndpoints(endpoints =>
             {
@@ -80,8 +80,7 @@ namespace RealEstate.API
 
             //app.UseDeveloperExceptionPage();
 
-            app.UseResponseCaching();
-            //app.UseMvc();
+            
         }
     }
 }

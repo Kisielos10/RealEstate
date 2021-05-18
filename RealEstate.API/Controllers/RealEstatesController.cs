@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Mime;
 using System.Threading.Tasks;
@@ -15,9 +16,6 @@ using NSwag.Annotations;
 using RealEstate.API.DTO;
 using RealEstate.API.Persistence;
 using RealEstate.API.Repositiories;
-using System.Drawing;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Image = System.Drawing.Image;
 
 namespace RealEstate.API.Controllers
 {
@@ -27,32 +25,34 @@ namespace RealEstate.API.Controllers
     public class RealEstatesController : BaseController
     {
         private readonly IRealEstateRepository _realEstateRepository;
-        private readonly RealEstateDbContext _context;
 
-
-        public RealEstatesController(IRealEstateRepository realEstateRepository, RealEstateDbContext context)
+        public RealEstatesController(IRealEstateRepository realEstateRepository)
         {
             _realEstateRepository = realEstateRepository;
-            _context = context;
         }
 
 
         [HttpGet]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
-        //[ResponseCache(Duration =  60, Location = ResponseCacheLocation.Any)]
+        [ResponseCache(Duration =  20, Location = ResponseCacheLocation.Any)]
         public ActionResult<RealEstateDto> Get()
         {
             var realEstate = _realEstateRepository.Get();
             return Ok(realEstate);
         }
-        //TODO dodawać i usuwać zdjęcia do real estate blob storage
         //TODO dodaj lepsze cache'owanie (server side)
         //TODO oData
+        [HttpGet("{filter}")]
+        [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
+        public ActionResult<RealEstateDto> GetByExpression(Expression<Func<Persistence.RealEstate, bool>> filterExpression)
+        {
+            var realEstate = _realEstateRepository.Get(filterExpression);
+            return Ok(realEstate);
+        }
         /// <summary>
-        /// Just a regular get endpoint
-        /// <see cref="RealEstateDto"/>
+        ///
         /// </summary>
-        /// <param name="id">bla bla bla</param>
+        /// <param name="id">Real Estate Id</param>
         /// <returns></returns>
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(ErrorDto))]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
@@ -63,7 +63,7 @@ namespace RealEstate.API.Controllers
 
             if (realEstate == null)
             {
-                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with {id} id was not found"));
+                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with id {id} was not found"));
             }
 
             return Ok(realEstate);
@@ -77,7 +77,7 @@ namespace RealEstate.API.Controllers
         {
             if (_realEstateRepository.GetById(id) == null)
             {
-                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with {id} id was not found"));
+                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with id {id} was not found"));
             }
 
             var result = _realEstateRepository.Update(updateRealEstateDto, id);
@@ -92,7 +92,7 @@ namespace RealEstate.API.Controllers
         {
             if (_realEstateRepository.GetById(id) == null)
             {
-                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with {id} id was not found"));
+                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with id {id} was not found"));
             }
 
             _realEstateRepository.Delete(id);
@@ -107,50 +107,6 @@ namespace RealEstate.API.Controllers
             var result = _realEstateRepository.Add(createRealEstateDto);
 
             return Created(new Uri($"{Request.Path}/{result.Id}",UriKind.Relative) ,result);
-        }
-
-        [SwaggerResponse(HttpStatusCode.OK,typeof(object))]
-        [HttpPost("upload")]
-        //public async Task<IActionResult> OnPostUploadAsync(List<IFormFile> files)
-        public ActionResult<Guid> UploadImage(List<IFormFile> files)
-        {
-
-            foreach(var file in files)
-            {
-                var img = new Persistence.Image
-                {
-                    ImageTitle = file.FileName,
-                    Suffix = Path.GetExtension(file.FileName)
-                };
-
-                var ms = new MemoryStream();
-                file.CopyTo(ms);
-                img.ImageData = ms.ToArray();
-
-                ms.Close();
-                ms.Dispose();
-
-                _context.Images.Add(img);
-                _context.SaveChanges();
-
-                return img.Id;
-            }
-
-            return Guid.Empty;
-
-        }
-        [HttpPost("Retrieve")]
-        [SwaggerResponse(HttpStatusCode.OK,typeof(Image))]
-        public ActionResult<System.Drawing.Image> RetrieveImage()
-        {
-            var img = _context.Images.FirstOrDefault(opt => opt.Id == Guid.Empty);
-
-            using var ms = new MemoryStream(img.ImageData);
-
-            var returnImage = Image.FromStream(ms);
-
-            return Ok(returnImage);
-
         }
     }
 }

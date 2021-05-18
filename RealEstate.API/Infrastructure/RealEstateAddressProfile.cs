@@ -13,6 +13,7 @@ namespace RealEstate.API.Infrastructure
         public RealEstateAddressProfile()
         {
             CreateMap<RealEstateAddress, AddressDto>();
+            CreateMap<AddressDto, RealEstateAddress>();
         }
     }
 }

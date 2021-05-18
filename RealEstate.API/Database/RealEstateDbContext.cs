@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstate.API.Persistence;
 
 namespace RealEstate.API
@@ -33,7 +34,13 @@ namespace RealEstate.API
             modelBuilder
                 .Entity<Persistence.RealEstate>()
                 .Property(e => e.BuildingType)
-                .HasDefaultValue(BuildingType.Other);
+                //.HasConversion(
+                //    e => e.ToString(),
+                //    e => (BuildingType)Enum.Parse(typeof(BuildingType), e)
+                //    );
+                //.HasConversion(new EnumToStringConverter<BuildingType>());
+                .HasConversion<string>();
+            //.HasDefaultValue(BuildingType.Other);
         }
 
     }

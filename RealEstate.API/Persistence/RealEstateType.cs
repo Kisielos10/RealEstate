@@ -7,5 +7,6 @@ namespace RealEstate.API.Persistence
 {
     public class RealEstateType
     {
+
     }
 }

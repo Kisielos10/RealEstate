@@ -30,34 +30,33 @@ namespace RealEstate.API.Controllers
         public ActionResult<RealEstateNoteDto> GetById(int id)
         {
             if (!ModelState.IsValid)
-                return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with {id} id is not valid"));
+                return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with id {id} is not valid"));
 
-            var realEstateNote = _realEstateRepository.GetById(id);
+            var realEstateNote = _realEstateNotes.GetById(id);
 
             if (realEstateNote == null)
             {
-                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate Note with {id} id was not found"));
+                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate Note with id {id} was not found"));
             }
 
             return Ok(realEstateNote);
         }
         [SwaggerResponse(HttpStatusCode.NotFound,typeof(ErrorDto))]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateNoteDto))]
-        [HttpGet("{realEstateId}")]
+        [HttpGet]
         public ActionResult<List<RealEstateNoteDto>> GetByRealEstateId([FromQuery]int realEstateId)
         {
-            //TODO przerobić żeby nie było błędu
             if (!ModelState.IsValid)
-                return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with {realEstateId} id is not valid"));
+                return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with id {realEstateId}  is not valid"));
 
-            var realEstateNote = _realEstateNotes.GetById(realEstateId);
+            var realEstateNotes = _realEstateNotes.GetByRealEstateId(realEstateId);
 
-            if (realEstateNote == null)
+            if (realEstateNotes == null)
             {
-                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate Note with {realEstateId} id was not found"));
+                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with id {realEstateId} either does not exist or there are no notes attached to this RealEstate"));
             }
 
-            return Ok(realEstateNote);
+            return Ok(realEstateNotes);
         }
 
         [SwaggerResponse(HttpStatusCode.NotFound,typeof(ErrorDto))]
@@ -81,12 +80,11 @@ namespace RealEstate.API.Controllers
         [HttpPost]
         public ActionResult<RealEstateNoteDto> Post([FromBody] CreateRealEstateNoteDto createRealEstateNoteDto )
         {
-            //IValidatableObject 
             if (!ModelState.IsValid)
-                return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with {createRealEstateNoteDto.RealEstateId} id is not valid"));
-            if (_realEstateRepository.Get().Any(x => x.Id == createRealEstateNoteDto.RealEstateId))
+                return BadRequest(new ErrorDto(HttpStatusCode.BadRequest,$"Real Estate Note with id {createRealEstateNoteDto.RealEstateId} is not valid"));
+            if (_realEstateRepository.GetById(createRealEstateNoteDto.RealEstateId) == null)
             {
-                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate Note with {createRealEstateNoteDto.RealEstateId} id was not found"));
+                return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Real Estate with id {createRealEstateNoteDto.RealEstateId} was not found"));
             }
 
             var result = _realEstateNotes.Add(createRealEstateNoteDto);

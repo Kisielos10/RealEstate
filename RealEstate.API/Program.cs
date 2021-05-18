@@ -14,18 +14,8 @@ namespace RealEstate.API
     {
         public static void Main(string[] args)
         {
-            var host =CreateHostBuilder(args).Build();
+            var host = CreateHostBuilder(args).Build();
 
-            CreateDbIfNotExists(host);
-
-            host.Run();
-
-            //CreateHostBuilder(args).Build().Run();
-            
-        }
-
-        private static void CreateDbIfNotExists(IHost host)
-        {
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -40,6 +30,11 @@ namespace RealEstate.API
                     logger.LogError(ex, "An error occurred creating the DB.");
                 }
             }
+
+            host.Run();
+
+            //CreateHostBuilder(args).Build().Run();
+            
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

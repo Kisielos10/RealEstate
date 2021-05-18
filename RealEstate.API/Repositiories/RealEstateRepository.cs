@@ -4,10 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using RealEstate.API.DTO;
 using RealEstate.API.Persistence;
+using RealEstate.API.Validators;
 
 namespace RealEstate.API.Repositiories
 {
@@ -15,6 +17,7 @@ namespace RealEstate.API.Repositiories
     {
         private readonly RealEstateDbContext _context;
         private readonly IMapper _mapper;
+        //private CreateRealEstateDtoValidator validator = new CreateRealEstateDtoValidator();
 
         public RealEstateRepository(RealEstateDbContext context, IMapper mapper)
         {
@@ -25,13 +28,22 @@ namespace RealEstate.API.Repositiories
         public RealEstateDto Add(CreateRealEstateDto createRealEstateDto)
         {
 
+            //ValidationResult result = validator.Validate(createRealEstateDto);
+
+            //string errorMesseges = result.ToString();
+
+            //if (result.IsValid)
+            //{
+                
+            //}
+
             var realEstate = new Persistence.RealEstate()
             {
                 Price = createRealEstateDto.Price,
                 Area = createRealEstateDto.Area,
                 BuildingType = createRealEstateDto.Type ?? BuildingType.Other,
                 YearBuilt = createRealEstateDto.YearBuilt,
-                //TODO dodać jakąś walidacje
+
                 RealEstateAddress = new RealEstateAddress
                 {
                     ApartmentNumber = createRealEstateDto.Address.ApartmentNumber,
@@ -69,7 +81,6 @@ namespace RealEstate.API.Repositiories
         {
             var realEstate = _context.RealEstates.ToList();
             //Tak trzeba robić
-            //todo czemu nie wyświetla building type?
             var mappedRealEstate = _mapper.Map<List<Persistence.RealEstate>,List<RealEstateDto>>(realEstate);
 
             return mappedRealEstate;
@@ -77,7 +88,10 @@ namespace RealEstate.API.Repositiories
 
         public List<RealEstateDto> Get(Expression<Func<Persistence.RealEstate, bool>> filterExpression)
         {
-            throw new NotImplementedException();
+            var realEstate = _context.RealEstates.Where(filterExpression).ToList();
+            var mappedRealEstate = _mapper.Map<List<Persistence.RealEstate>,List<RealEstateDto>>(realEstate);
+
+            return mappedRealEstate;
         }
 
         public RealEstateDto GetById(int id)
@@ -89,18 +103,17 @@ namespace RealEstate.API.Repositiories
             return mappedRealEstate;
         }
 
-        public RealEstateDto Update(UpdateRealEstateDto realEstate, int id)
+        public RealEstateDto Update(UpdateRealEstateDto updateRealEstateDto, int id)
         {
             var realEstateToUpdate = _context.RealEstates.FirstOrDefault(opt => opt.Id == id);
 
             if (realEstateToUpdate == null) return null;
 
-            realEstateToUpdate.Price = realEstate.Price ?? realEstateToUpdate.Price;
-            //todo to trzeba zmapować i zapisać
-            //realEstateToUpdate.RealEstateAddress = realEstate.Address ?? realEstateToUpdate.RealEstateAddress;
-            realEstateToUpdate.Area = realEstate.Area ?? realEstateToUpdate.Area;
-            realEstateToUpdate.BuildingType = realEstate.Type ?? realEstateToUpdate.BuildingType;
-            realEstateToUpdate.YearBuilt = realEstate.YearBuilt ?? realEstateToUpdate.YearBuilt;
+            realEstateToUpdate.Price = updateRealEstateDto.Price ?? realEstateToUpdate.Price;
+            realEstateToUpdate.RealEstateAddress = _mapper.Map<RealEstateAddress>(updateRealEstateDto.Address) ?? realEstateToUpdate.RealEstateAddress;
+            realEstateToUpdate.Area = updateRealEstateDto.Area ?? realEstateToUpdate.Area;
+            realEstateToUpdate.BuildingType = updateRealEstateDto.Type ?? realEstateToUpdate.BuildingType;
+            realEstateToUpdate.YearBuilt = updateRealEstateDto.YearBuilt ?? realEstateToUpdate.YearBuilt;
 
             _context.SaveChanges();
 
