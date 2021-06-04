@@ -14,7 +14,6 @@ namespace RealEstate.API.Infrastructure
         public RealEstateProfile()
         {
             CreateMap<Persistence.RealEstate, RealEstateDto>()
-                .ForMember(dest => dest.BuildingType, opt => opt.MapFrom(src => src.BuildingType))
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.RealEstateAddress))
                 .ForMember(dest => dest.PricePerMeter, opt =>
                 {

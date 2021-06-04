@@ -1,20 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
-using System.Net.Mime;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using NSwag.Annotations;
 using RealEstate.API.DTO;
-using RealEstate.API.Persistence;
 using RealEstate.API.Repositiories;
 
 namespace RealEstate.API.Controllers
@@ -34,17 +23,17 @@ namespace RealEstate.API.Controllers
 
         [HttpGet]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
-        [ResponseCache(Duration =  20, Location = ResponseCacheLocation.Any)]
+        [ResponseCache(Duration =  60, Location = ResponseCacheLocation.Any)]
         public ActionResult<RealEstateDto> Get()
         {
             var realEstate = _realEstateRepository.Get();
             return Ok(realEstate);
         }
-        //TODO dodaj lepsze cache'owanie (server side)
-        //TODO oData
-        [HttpGet("{filter}")]
+        //TODO oData graphql
+        [HttpGet("{filterExpression}")]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
-        public ActionResult<RealEstateDto> GetByExpression(Expression<Func<Persistence.RealEstate, bool>> filterExpression)
+        //[ResponseCache(Duration =  60, Location = ResponseCacheLocation.Any)]
+        public ActionResult<RealEstateDto> GetByExpression( Expression<Func<Persistence.RealEstate, bool>> filterExpression)
         {
             var realEstate = _realEstateRepository.Get(filterExpression);
             return Ok(realEstate);
@@ -56,7 +45,8 @@ namespace RealEstate.API.Controllers
         /// <returns></returns>
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(ErrorDto))]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
+        //[ResponseCache(Duration =  60, Location = ResponseCacheLocation.Any)]
         public ActionResult<RealEstateDto> GetById(int id)
         {
             var realEstate = _realEstateRepository.GetById(id);
@@ -102,11 +92,12 @@ namespace RealEstate.API.Controllers
         }
         [SwaggerResponse(HttpStatusCode.Created,typeof(RealEstateDto))]
         [HttpPost]
+        //todo czasami nie mogę w swaggerze kliknąć "execute"
         public ActionResult<RealEstateDto> Post([FromBody] CreateRealEstateDto createRealEstateDto )
         {
             var result = _realEstateRepository.Add(createRealEstateDto);
 
-            return Created(new Uri($"{Request.Path}/{result.Id}",UriKind.Relative) ,result);
+            return Created(new Uri($"{Request.Path}/{result}",UriKind.Relative) ,result);
         }
     }
 }

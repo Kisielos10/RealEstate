@@ -43,7 +43,7 @@ namespace RealEstate.API.Controllers
             }
             else if (buildingType.HasValue)
             {
-                predicate = dto => dto.BuildingType == buildingType.Value;
+                //predicate = dto => dto.BuildingType == buildingType.Value;
             }
             else
             {

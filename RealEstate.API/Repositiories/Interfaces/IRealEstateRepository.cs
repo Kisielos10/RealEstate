@@ -13,8 +13,7 @@ namespace RealEstate.API.Repositiories
         List<RealEstateDto> Get();
         List<RealEstateDto> Get(Expression<Func<Persistence.RealEstate,bool>> filterExpression);
         RealEstateDto GetById(int id);
-        //TODO czy może lepiej nie zwracać tylko id?
-        RealEstateDto Add(CreateRealEstateDto createRealEstateDto);
+        int Add(CreateRealEstateDto createRealEstateDto);
         RealEstateDto Update(UpdateRealEstateDto updateRealEstateDto, int id);
         void Delete(int id);
 

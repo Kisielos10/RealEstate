@@ -25,11 +25,6 @@ namespace RealEstate.API.Repositiories
         public List<RealEstateNoteDto> GetByRealEstateId(int id)
         {
             var listOfRealEstateNote = _context.RealEstateNotes.Where(opt => opt.RealEstateId == id).ToList();
-            //todo czy jest to potrzebne? Wcześniej jeżeli nic nie było to przechodziło
-            if (listOfRealEstateNote.Count == 0)
-            {
-                return null;
-            }
 
             var mappedRealEstateNotes = _mapper.Map<List<RealEstateNote>, List<RealEstateNoteDto>>(listOfRealEstateNote);
 

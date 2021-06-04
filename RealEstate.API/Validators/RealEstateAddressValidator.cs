@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentValidation;
+﻿using FluentValidation;
+using RealEstate.API.DTO;
 using RealEstate.API.Persistence;
 
 namespace RealEstate.API.Validators
 {
-    public class RealEstateAddressValidator : AbstractValidator<RealEstateAddress>
+    public class RealEstateAddressValidator : AbstractValidator<AddressDto>
     {
         public RealEstateAddressValidator()
         {

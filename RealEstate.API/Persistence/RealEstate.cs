@@ -21,7 +21,6 @@ namespace RealEstate.API.Persistence
         public int? YearBuilt { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal? PricePerMeter { get; set; }
-        //TODO tabela słownikowa static data
         public BuildingType BuildingType { get; set; }
 
         public RealEstateAddress RealEstateAddress { get; set; }

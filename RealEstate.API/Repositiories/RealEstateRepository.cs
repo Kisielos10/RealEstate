@@ -17,7 +17,6 @@ namespace RealEstate.API.Repositiories
     {
         private readonly RealEstateDbContext _context;
         private readonly IMapper _mapper;
-        //private CreateRealEstateDtoValidator validator = new CreateRealEstateDtoValidator();
 
         public RealEstateRepository(RealEstateDbContext context, IMapper mapper)
         {
@@ -25,25 +24,15 @@ namespace RealEstate.API.Repositiories
             _mapper = mapper;
         }
 
-        public RealEstateDto Add(CreateRealEstateDto createRealEstateDto)
+        public int Add(CreateRealEstateDto createRealEstateDto)
         {
-
-            //ValidationResult result = validator.Validate(createRealEstateDto);
-
-            //string errorMesseges = result.ToString();
-
-            //if (result.IsValid)
-            //{
-                
-            //}
-
             var realEstate = new Persistence.RealEstate()
             {
                 Price = createRealEstateDto.Price,
                 Area = createRealEstateDto.Area,
                 BuildingType = createRealEstateDto.Type ?? BuildingType.Other,
                 YearBuilt = createRealEstateDto.YearBuilt,
-
+                //todo problem tutaj
                 RealEstateAddress = new RealEstateAddress
                 {
                     ApartmentNumber = createRealEstateDto.Address.ApartmentNumber,
@@ -57,9 +46,9 @@ namespace RealEstate.API.Repositiories
 
             _context.SaveChanges();
 
-            var mappedRealEstate = _mapper.Map<RealEstateDto>(realEstate);
+            //var mappedRealEstate = _mapper.Map<RealEstateDto>(realEstate);
 
-            return mappedRealEstate;
+            return realEstate.Id;
         }
 
         public void Delete(int id)
@@ -89,6 +78,7 @@ namespace RealEstate.API.Repositiories
         public List<RealEstateDto> Get(Expression<Func<Persistence.RealEstate, bool>> filterExpression)
         {
             var realEstate = _context.RealEstates.Where(filterExpression).ToList();
+
             var mappedRealEstate = _mapper.Map<List<Persistence.RealEstate>,List<RealEstateDto>>(realEstate);
 
             return mappedRealEstate;

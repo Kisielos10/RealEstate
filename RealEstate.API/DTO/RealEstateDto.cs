@@ -12,8 +12,7 @@ namespace RealEstate.API.DTO
         [Range(0,20000000)]
         public decimal Price { get; set; }
         public decimal Area { get; set; }
-        //todo czy tego nie zamienić na string?
-        public BuildingType BuildingType { get; set; }
+        public string BuildingType { get; set; }
         public int YearBuilt { get; set; }
         public decimal PricePerMeter { get; set; }
         public AddressDto Address { get; set; }

@@ -20,27 +20,12 @@ namespace RealEstate.API
             
         }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder
-        //        .Entity<Persistence.RealEstate>()
-        //        .Property(e => e.BuildingType)
-        //        .HasConversion(
-        //            v => v.ToString(),
-        //            v => (BuildingType)Enum.Parse(typeof(BuildingType), v));
-        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .Entity<Persistence.RealEstate>()
                 .Property(e => e.BuildingType)
-                //.HasConversion(
-                //    e => e.ToString(),
-                //    e => (BuildingType)Enum.Parse(typeof(BuildingType), e)
-                //    );
-                //.HasConversion(new EnumToStringConverter<BuildingType>());
                 .HasConversion<string>();
-            //.HasDefaultValue(BuildingType.Other);
         }
 
     }

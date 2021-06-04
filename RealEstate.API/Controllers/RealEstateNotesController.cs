@@ -27,6 +27,7 @@ namespace RealEstate.API.Controllers
         [SwaggerResponse(HttpStatusCode.NotFound,typeof(ErrorDto))]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateNoteDto))]
         [HttpGet("{id}")]
+        [ResponseCache(Duration =  60, Location = ResponseCacheLocation.Any)]
         public ActionResult<RealEstateNoteDto> GetById(int id)
         {
             if (!ModelState.IsValid)
@@ -44,6 +45,7 @@ namespace RealEstate.API.Controllers
         [SwaggerResponse(HttpStatusCode.NotFound,typeof(ErrorDto))]
         [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateNoteDto))]
         [HttpGet]
+        [ResponseCache(Duration =  60, Location = ResponseCacheLocation.Any,VaryByQueryKeys = new []{"realEstateId"})]
         public ActionResult<List<RealEstateNoteDto>> GetByRealEstateId([FromQuery]int realEstateId)
         {
             if (!ModelState.IsValid)

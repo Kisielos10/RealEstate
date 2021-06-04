@@ -18,19 +18,17 @@ namespace RealEstate.API.Controllers
     public class ImageController : BaseController
     {
         //todo co chciałbym jeszcze zrobić
-        //Reszta rzeczy fluent validation
         //SOLID (moge zrobić samemu?)
         //Dependency Injection Life Cycles
         //Log Framework np Serilog albo Nlog
         //Test mocking np Moq
         //Integration Testing
         //Czy warto się uczyć wzorców projektowych? (CQRS na pewno ale jakieś builder albo singleton?)
-        //caching https://docs.coravel.net/Caching/ czy jakoś bardziej native?
         //Allow users to get all apartments and filter by status (Available, Reserved, NotAvailable) and other criteria
         //Azure
         //JWT
         //ASP.NET Identity
-
+        //Może jakiś framework do cache'ingu
 
         private readonly IRealEstateRepository _realEstateRepository;
         private readonly RealEstateDbContext _context;
@@ -86,19 +84,17 @@ namespace RealEstate.API.Controllers
 
         [SwaggerResponse(HttpStatusCode.OK, typeof(object))]
         [SwaggerResponse(HttpStatusCode.NotFound, typeof(ErrorDto))]
-        [ResponseCache(Duration =  20, Location = ResponseCacheLocation.Client)]
+        //[ResponseCache(Duration =  120, Location = ResponseCacheLocation.Client)]
         [HttpGet ("{id}")]
         public IActionResult GetImage(int id)
         {
-           //var image = _context.Images.FirstOrDefault(i => i.Id == id);
-            var image = _context.Images.FirstOrDefault(i => i.Id == id);
+           var image = _context.Images.FirstOrDefault(i => i.Id == id);
 
             if (image == null)
             {
                 return NotFound(new ErrorDto(HttpStatusCode.NotFound,$"Image with id {id} was not found"));
             }
             var imageData = image.ImageData;
-            //todo do rozkminy
             var contentType = "image/" + image.ImageTitle;
             var response = File(imageData,contentType);
 
