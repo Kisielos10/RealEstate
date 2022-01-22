@@ -30,9 +30,10 @@ namespace RealEstate.API
             services.AddTransient<StatisticsCalculator>();
 
             
-            services.AddSwaggerDocument(c =>
+            services.AddOpenApiDocument(c =>
             {
                 c.GenerateXmlObjects = true;
+                c.Title = "Real Estate Web API";
             });
 
             services.AddResponseCaching();

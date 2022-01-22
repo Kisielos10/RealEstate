@@ -14,7 +14,6 @@ namespace RealEstate.API
         {
             context.Database.EnsureCreated();
 
-
             if (context.RealEstates.Any())
             {
                 return;

@@ -4,6 +4,8 @@
     <TargetFramework>net5.0</TargetFramework>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	  <NoWarn>$(NoWarn);1591</NoWarn>
+	  <Nullable>disable</Nullable>
+	  <UserSecretsId>f606cd0d-857d-4195-b449-8333f234036f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,14 +15,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-    <PackageReference Include="NSwag.AspNetCore" Version="13.10.8" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.12.0" />
   </ItemGroup>
 
 </Project>

@@ -9,5 +9,6 @@ namespace RealEstate.API.Persistence
         public string ImageTitle { get; set; }
         public byte[] ImageData { get; set; }
         public string Suffix { get; set; }
+
     }
 }

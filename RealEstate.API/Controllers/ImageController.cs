@@ -18,17 +18,11 @@ namespace RealEstate.API.Controllers
     public class ImageController : BaseController
     {
         //todo co chciałbym jeszcze zrobić
-        //SOLID (moge zrobić samemu?)
-        //Dependency Injection Life Cycles
         //Log Framework np Serilog albo Nlog
         //Test mocking np Moq
         //Integration Testing
-        //Czy warto się uczyć wzorców projektowych? (CQRS na pewno ale jakieś builder albo singleton?)
-        //Allow users to get all apartments and filter by status (Available, Reserved, NotAvailable) and other criteria
-        //Azure
+        // 1 Allow users to get all apartments and filter by status (Available, Reserved, NotAvailable) and other criteria
         //JWT
-        //ASP.NET Identity
-        //Może jakiś framework do cache'ingu
 
         private readonly IRealEstateRepository _realEstateRepository;
         private readonly RealEstateDbContext _context;

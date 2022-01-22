@@ -22,7 +22,6 @@ namespace RealEstate.API.Persistence
         [Column(TypeName = "decimal(18,2)")]
         public decimal? PricePerMeter { get; set; }
         public BuildingType BuildingType { get; set; }
-
         public RealEstateAddress RealEstateAddress { get; set; }
         public ICollection<RealEstateNote> RealEstateNotes { get; set; }
     }

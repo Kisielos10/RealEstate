@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net;
 using NSwag.Annotations;
@@ -22,9 +23,9 @@ namespace RealEstate.API.Controllers
 
 
         [HttpGet]
-        [SwaggerResponse(HttpStatusCode.OK,typeof(RealEstateDto))]
+        [SwaggerResponse(HttpStatusCode.OK,typeof(List<RealEstateDto>))]
         [ResponseCache(Duration =  60, Location = ResponseCacheLocation.Any)]
-        public ActionResult<RealEstateDto> Get()
+        public ActionResult<List<RealEstateDto>> Get()
         {
             var realEstate = _realEstateRepository.Get();
             return Ok(realEstate);
@@ -92,10 +93,11 @@ namespace RealEstate.API.Controllers
         }
         [SwaggerResponse(HttpStatusCode.Created,typeof(RealEstateDto))]
         [HttpPost]
-        //todo czasami nie mogę w swaggerze kliknąć "execute"
         public ActionResult<RealEstateDto> Post([FromBody] CreateRealEstateDto createRealEstateDto )
         {
             var result = _realEstateRepository.Add(createRealEstateDto);
+
+
 
             return Created(new Uri($"{Request.Path}/{result}",UriKind.Relative) ,result);
         }

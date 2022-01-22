@@ -32,7 +32,6 @@ namespace RealEstate.API.Repositiories
                 Area = createRealEstateDto.Area,
                 BuildingType = createRealEstateDto.Type ?? BuildingType.Other,
                 YearBuilt = createRealEstateDto.YearBuilt,
-                //todo problem tutaj
                 RealEstateAddress = new RealEstateAddress
                 {
                     ApartmentNumber = createRealEstateDto.Address.ApartmentNumber,
@@ -45,8 +44,6 @@ namespace RealEstate.API.Repositiories
             _context.RealEstates.Add(realEstate);
 
             _context.SaveChanges();
-
-            //var mappedRealEstate = _mapper.Map<RealEstateDto>(realEstate);
 
             return realEstate.Id;
         }
@@ -69,7 +66,6 @@ namespace RealEstate.API.Repositiories
         public List<RealEstateDto> Get()
         {
             var realEstate = _context.RealEstates.ToList();
-            //Tak trzeba robić
             var mappedRealEstate = _mapper.Map<List<Persistence.RealEstate>,List<RealEstateDto>>(realEstate);
 
             return mappedRealEstate;
@@ -78,7 +74,6 @@ namespace RealEstate.API.Repositiories
         public List<RealEstateDto> Get(Expression<Func<Persistence.RealEstate, bool>> filterExpression)
         {
             var realEstate = _context.RealEstates.Where(filterExpression).ToList();
-
             var mappedRealEstate = _mapper.Map<List<Persistence.RealEstate>,List<RealEstateDto>>(realEstate);
 
             return mappedRealEstate;

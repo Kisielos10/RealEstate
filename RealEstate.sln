@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\release.yml = .github\workflows\release.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateIntegrationTests", "RealEstateIntegrationTests\RealEstateIntegrationTests.csproj", "{A2543A64-38E3-4F72-9EFD-959A2E4E6D6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{175D4D6C-7806-4A3C-81F2-6D1CA7021F90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{175D4D6C-7806-4A3C-81F2-6D1CA7021F90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{175D4D6C-7806-4A3C-81F2-6D1CA7021F90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2543A64-38E3-4F72-9EFD-959A2E4E6D6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2543A64-38E3-4F72-9EFD-959A2E4E6D6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2543A64-38E3-4F72-9EFD-959A2E4E6D6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2543A64-38E3-4F72-9EFD-959A2E4E6D6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
